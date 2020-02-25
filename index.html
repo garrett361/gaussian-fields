@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Garrett Goon - Gaussian Fields</title>
+        <meta name="description" content="">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Importing font(s) -->
+        <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+       
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
+
+        <!-- Importing prettyprint, for making code look nice -->
+
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin="></script>
+
+
+        
+
+        
+        <script src="JSHighlighter/lang-mma.min.js"></script>
+        <link rel="stylesheet" href="JSHighlighter/prettify-mma.css">
+
+        <!-- Custom stylesheet -->
+        <link rel="stylesheet" href="css/goon-projects.css">
+
+        
+
+        
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+
+
+        <!-- Mathjax -->
+
+        <script src="js/mathjax-config.js" defer> </script>
+            <script type="text/javascript" id="MathJax-script" async
+              src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+            </script>
+        
+
+
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- sidebar filler for desktop view -->
+        <div class="project-sidebar-left hidden-xs hidden-sm"> </div>
+        <div class="project-sidebar-right hidden-xs hidden-sm"> </div> 
+
+
+
+
+
+
+
+        <div class="main-content">
+            <div class="fluid-container">
+
+                <div class="content-wrapper">
+
+                   
+
+            <h1>
+                Gaussian Fields
+            </h1>
+
+            <div>
+
+                <!-- Introduction -->
+
+            <h2>
+                Introduction
+            </h2>
+
+            </div> 
+
+            <p>
+                <u>Note:</u> <em>To view full latex expression on mobile, you may need to visit the desktop site. </em>
+            </p>
+
+            <p>
+                In Cosmology, we are often interested in understanding the spatial correlations amongst fluctuations of various kinds. Of particular importance are two-point correlation functions of the form \(\langle \phi(\bfx)\phi(\bfy)\rangle\) where \(\phi(\bfx)\) is some scalar quantity, say a temperature fluctuation.
+            </p>
+            
+
+            <p>
+                Because of the homogeneous and isotropic nature of spatial slices, it’s convenient to discuss the Fourier transform of the correlator which takes on the form \(\langle\phi_{\bfk}\phi_{-\bfk}\rangle'=P(k)\) where the power spectrum, \(P(k)\), only depends on the magnitude of \(\bfk\), as indicated (see below for more on the notation).
+            </p>
+
+            <p>
+                All of the physics of the two-point function is encoded in P(k) and hence it’s typically the quantity we focus on. However, if handed a P(k), it’s not very easy to visualize what a corresponding spatial map of fluctuations would look like. In order to gain intuition for the power spectrum and to understand how the fluctuations change as P(k) is altered, it’s nice to be able to go from a given power spectrum to some concrete position space maps whose statistics realize a given power spectrum.
+            </p>
+
+            
+            <p class="black-border">
+                <b>In this post we answer the following question:</b> <em> if we’re handed a P(k) which describes a Gaussian random field, how do we generate a simple fluctuation map which has the correlations described by this power spectrum?</em>
+            </p>
+
+
+            <p>
+                We start by reviewing some of the theory behind random Gaussian fields which I found difficult to find in any one place in the literature and then move on to the practical construction of our maps using Mathematica. A sample notebook is included at the end of the post.  The methods used for constructing the realization are by no means optimal; our goal is just to understand a quick and dirty method of generating realizations.
+            </p>
+
+
+            <!-- Theory Background -->
+
+            <h2> Theory Background</h2>
+
+            <p>
+                We start by reviewing the necessary theory background.
+            </p>
+
+            <h3> Correlators </h3>
+
+            <p>
+                First, we set notation and review basic facts about equal time correlators of scalar quantities. We focus only on two-point functions.
+            </p>
+
+
+            <p>
+                A homogeneous, isotropic position space two-point corrrelator only depends on the magnitude of the distance between the points of interest: ⟨ϕ(x)ϕ(y)⟩=A(|x−y|). Due to this fact, the Fourier transformed correlator is proportional to a delta function and only depends on the magnitude of the momentum (i.e. wavevector):
+            </p>
+
+            \[
+                Equation
+            \]
+
+            <p>
+                We then put a prime on the momentum space correlator to indicate that we’ve dropped the delta function and associated 2π factors: 
+            </p>
+            
+            \[
+                Equation
+            \]
+
+            <p>
+                We define δ~d(k+p)≡(2π)dδd(k+p) and later use k~≡k/2π to minimize the number of explicit 2π’s appearing.
+            </p>
+
+            <p>
+                Two functional forms of the power spectrum are particularly important: white noise and scale invariant power spectra. 
+            </p>
+
+            <p>
+                <b>White Noise:</b> P(k)∝C, with C constant. This corresponds to a position space correlator of the form ⟨ϕ(x)ϕ(y)⟩∝Cδd(x−y), i.e. there are no correlations between fluctuations at separated points if the power spectrum is described by white noise.
+            </p>
+
+            <p>
+                <b>Scale Invariant:</b> P(k)∝k−d in d spatial dimensions. A scale invariant power spectrum corresponds to fluctuations which have the same correlations no matter how separated the two points are:
+            </p>
+
+            \[
+                Equation
+            \]
+
+            <!-- PDFs -->
+
+            <h4> Probability Distributions: Functions and Functionals </h4>
+
+            <p>We now review how probability distributions work for continuous, Gaussian random fields. We start with a brief review of the analogous theory for continuous random variables. </p>
+
+            <p>
+                <b>Probability Distribution Functions (PDF):</b> Given some continuous random variable q, the probability that q lies in some range dq is given by P(q)dq, where P(q) is the PDF. The PDF is normalized as ∫dqP(q)=1 and the expectation value of qn is given by
+            </p>
+            
+            \[
+                Equation
+             \]
+
+
+            <p>
+                The Gaussian PDF is of primary importance. For n random variables, qi, the Gaussian PDF takes on the form:   
+            </p>
+
+            \[
+            Equation
+            \]
+            
+            <p>
+                where Aij is some positive definite matrix (and sums over repeated indices are implicit). The corresponding Gaussian two-point statistics are then given by: 
+            </p>
+
+            \[
+            Equation
+            \]
+
+            <p>
+                Probability Distribution Functionals are perhaps less familiar, but they are exactly the same idea as PDFs but simply applied to the case of random fields such as ϕ(x), rather than random variables such as qi. We will only focus on the case of Gaussian functionals whose form and properties are defined in exact analogy to the PDF case. Starting with a position space field ϕ(x), the Gaussian functional P[ϕ(x)] is written as 
+            </p>
+
+            \[
+            Equation
+            \]
+            
+            <p>
+                where we have omitted the normalization factor. correlators are then computed by a path integral over all field values ϕ(x). The outcome of the integral is determined in analogy to the PDF case. For instance, the two-point correlator is:
+            </p>
+
+            \[
+            Equation
+            \]
+
+            <p>
+                where the A−1(y,z) obeys 
+            </p>
+
+            \[
+            Equation
+            \]
+
+            <p>
+                White noise corresponds to the simple case where A(x,y)=Cδd(x−z) and A−1(x,y)=1Cδd(x−z), for instance. Assuming spatial homogeneity and isotropy, it is straightforward to Fourier transform the above formulas in order to derive their momentum space analogues:  
+            </p>
+
+            \[
+            Equation
+            \]
+
+            <p>
+                Clearly, the function A(k) above is simply the inverse of the power spectrum: P(k)=1/A(k). By adding terms cubic and higher order in ϕk to the exponential in P[ϕk], the distribution is made non-Gaussian. The search for non-Gaussian signatures in Cosmological statistics is part of cutting-edge experimental efforts, but further discussion of these issues falls outside of the scope of this post. 
+            </p>
+
+            <!-- Implementation -->
+
+            <h4> Implementation</h4>
+
+            <p>
+                We now demonstrate how to generate a realization, given P(k). We first present the steps to the process and explain the logic.  Then we show how to practically implement the steps in Mathematica. 
+            </p>
+
+            <h3> The Steps</h3>
+
+
+            <p>
+                A realization of a Gaussian random field with power spectrum  can be created via the following steps:
+            </p>
+
+            <ol>
+                <li> Start with a white noise field with unit amplitude \(\varphi_{\bfk}\) obeying \(\langle \varphi_{\bfk}\varphi_{-\bfk}\rangle'=1\)  </li>
+                <li> Generate a positipn space realization of the white noise, denoted by \(R_{\rm white}(\bfx)\).  That is, \(R_{\rm white}(\bfx)\) is a particular map showing the values of \(\varphi\) at varoius positions \(\bfx\) and for which \(\langle\varphi(\bfx)\varphi(\bfy)\rangle'=\delta^{d}(\bfx-\bfy)\)</li>
+                <li> Fourier transform the realization: \(R_{\rm white}(\bfx)\longrightarrow R_{\rm white}(\bfk)\)</li>
+                <li> Multiply \(R_{\rm white}(\bfk)\) by the square root of the power spectrum to create \(R_P(\bfk)=P^{1/2}(k)R_{\rm white}(\bfk)\).</li>
+                <li> Fourier transform \(R_P(\bfk)\) back to positio space to get the desired realization: \(R_P(\bfx)=\int\rd^d \tilde{k}\, e^{i\bfk\cdot\bfx} R_P(\bfx)\)</li>
+            </ol>
+
+            <p>
+                The logic behind the above steps is pretty simple. If we’re given a white noise field  which has 
+, then we can create a field  with the desired power spectrum  simply by defining . This new field has the desired statistics, since
+            </p>
+
+            
+            \[
+            Equation
+            \]
+
+            <p>
+                Therefore, given a realization of the white noise field , we just have to multiply its Fourier space realization by  and inverse Fourier transform to get a position space realization of . The above is practical, because making a white noise realization is easy.
+            </p>
+
+            <p>
+                These steps are idealized, as we’ll have to make the realization on a discrete grid; we won’t be able to work with continuous variables. Practical complications which arise from working on a lattice are covered in the following sections.  
+            </p>
+
+            <!-- Continuous to Discrete -->
+
+            <h3> From Continuous to Discrete</h3>
+
+            <p>
+                For concreteness, we focus on creating two-dimensional realizations on  grids, with  an even number. The generalization to higher dimensions is straightforward. In passing to a lattice, our continuous fields  and  are replaced by the discrete quantities 
+ and 
+, respectively, where . 
+ is the value of the field  at the point  on the grid. The continuous Fourier transform which related  and  is replaced by a discrete one:
+            </p>
+
+
+            \[
+            Equation
+            \]
+
+            <p>
+                where 
+ and 
+ 
+. Given real 
+’s and even , 
+ has the following properties:
+            </p>
+            
+            <ul class="color-dot-ul">
+                <li> 1</li>
+                <li> 2</li>
+            </ul>
+
+            <p>
+                The above further imply the following important property: 
+ and similar with the other index.
+            </p>
+
+            <!-- Building a Realization -->
+
+            <h3> Building a Realization</h3>
+
+            <p>
+                Now we walk through the steps involved in actually building a realization in Mathematica.
+            </p>
+
+            <h4> White Noise</h4>
+
+            <p>
+                First, we construct a grid of white noise. When passing to the grid, the unit white noise probability distribution functional 
+ 
+ becomes the ordinary PDF 
+ given by
+            </p>
+
+
+            \[
+            Equation
+            \]
+
+            <p>
+                Building a white noise realization is therefore simple: the value of  at every grid point is just randomly chosen from a Gaussian distribution. An example of such a realization is shown in Fig. 1 below.
+            </p>
+
+
+            <p>
+                FIGURE
+            </p>
+
+            <p>
+                In Mathematica, the white noise array can be generated via:
+            </p>
+
+            <pre class="prettyprint"><code class="lang-mma"> WhiteNoise=RandomVariate[NormalDistribution[],{Nsize,Nsize}] </code></pre>
+
+            <p>
+                where Nsize is the size of the grid (Nsize=1024 in Fig. 1). WhiteNoise is our realization  and building  is very simple: we just pass WhiteNoise through the built-in Fourier function:
+            </p>
+            \[
+            Equation
+            \]
+
+
+
+            \[
+            Equation
+            \]
+
+
+
+
+        </div> <!--content wrapper-->
+    </div> <!--fluid container-->
+</div> <!--main content-->
+
+
+
+
+        <script src="js/vendor/jquery-1.10.2.min.js"></script>
+        <script src="js/min/plugins.min.js"></script>
+        <script src="js/min/main.min.js"></script>
+
+    </body>
+</html>
