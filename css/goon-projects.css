@@ -34,7 +34,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 20px 0;
+  margin: 0 0 10px 0;
   font-weight: bold;
   line-height: 1.2;
   letter-spacing: normal;
@@ -46,7 +46,8 @@ h1 {
   font-size: 3.77em; }
 
 h2 {
-  font-size: 2.11em; }
+  font-size: 2.11em;
+ }
 
 h3 {
   font-size: 1.55em;
@@ -702,4 +703,27 @@ h3 {
  .prettyprint{
    padding-top: 200px;
    padding-bottom: 2px;
+ }
+
+
+ /* h1 title css  */
+
+ h1.title{
+   text-align: center;
+ }
+
+ /* ordered list margins */
+
+ ol {
+  margin: 0 0 0 1em; /* Also needed for space (tweak if needed) */
+ }
+
+ /* centered images */
+
+ figure.center,
+ figure.center img {
+   text-align: center;
+  display: block;
+   margin-left: auto;
+   margin-right: auto;
  }
