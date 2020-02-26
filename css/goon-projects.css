@@ -727,3 +727,9 @@ h3 {
    margin-left: auto;
    margin-right: auto;
  }
+
+ /* increasing the h4 top margin */
+
+ h4 {
+   margin-top: 30px;
+ }

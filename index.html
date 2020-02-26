@@ -378,7 +378,6 @@
 
             <pre class="prettyprint"><code class="lang-mma"> WhiteNoiseFourier=Fourier[WhiteNoise] </code></pre>
             
-            <br>
 
             <h4> Constructing the Fourier Realization</h4>
 
@@ -419,57 +418,64 @@
 </p>
 
             \[
-            \phi^{\bfx}_{ab}=\frac{1}{N^2}\sum_{c,d=0}^{N-1}\exp\left(ix_ck_a+ix_dk_b\right)\Phi^{\bfk}_{cd}\nn
+            \phi^{\bfx}_{ab}=\frac{1}{N^2}\sum_{c,d=0}^{N-1}\exp\left(ix_ck_a+ix_dk_b\right)\Phi^{\bfk}_{cd}\ .
             \]
 
             <p>
-                This fiels realized the desired spectrum. The construction of 
+                This field realizes the desired spectrum. The construction of 
  can be carried out in <em>Mathematica</em> as follows:   
             </p>
 
             <ol>
-                <li> We first build the vector  <pre class="prettyprint"><code class="lang-mma"> kVector=N[(2π)/Nsize*Join[Range[0,Nsize/2],Range[-Nsize/2+1,-1]]] </code></pre></li>
-                <li>Next, build the power spectrum function. Take it to be of the power law form: . Because this  is divergent at  (assuming ), we will set the value of the power spectrum to zero at this one point. This is implemented in <em>Mathematica</em> as: <pre class="prettyprint"><code class="lang-mma"> kVector=N[(2π)/Nsize*Join[Range[0,Nsize/2],Range[-Nsize/2+1,-1]]] </code></pre></li>
-                <li>We want to evaluate  at all points 
- with 
-. This array is constructed using the Outer command: <pre class="prettyprint"><code class="lang-mma"> sqrtPowerSpectrumArray=Outer[N[sqrt[PowerLawPowerSpectrum[n,Norm[{##}]]]]&,kVector,kVector] </code></pre> where n should be replaced by the desired number determining the power law.
+                <li> We first build the vector \(k_a=\frac{2\pi}{N}(0,\ldots, N/2,-N/2+1,\ldots, -1)\) as:
+                      <pre class="prettyprint"><code class="lang-mma"> kVector=N[(2π)/Nsize*Join[Range[0,Nsize/2],Range[-Nsize/2+1,-1]]] </code></pre></li>
+                <li>Next, build the power spectrum function. Take it to be of the power law form: \(P(k)\propto k^{-n}\). Because this \(P(k)\) is divergent at \(k=0\) (assuming \(n>0\)), we will set the value of the power spectrum to zero at this one point. This is implemented in <em>Mathematica</em> as: <pre class="prettyprint"><code class="lang-mma"> PowerLawPowerSpectrum[n_,k_]:= If[k==0,0,1/Abs[k^n]] </code></pre></li>
+                <li>We want to evaluate \(P^{1/2}(k)\) at all points \((k_a,k_b)\) with \(k=\sqrt{k_a^2+k_b^2}\). This array is constructed using the <code>Outer</code> command:
+                    <pre class="prettyprint"><code class="lang-mma"> sqrtPowerSpectrumArray=Outer[N[Sqrt[PowerLawPowerSpectrum[n,Norm[{##}]]]]&,kVector,kVector] </code></pre> where \(n\) should be replaced by the desired number determining the power law.
 </li>
-            <li>Finally, we mutiply the  entry of sqrtPowerSpectrumArray by the  entry of WhiteNoiseFourier to get PowerSpectrumRealizationFourier=sqrtPowerSpectrumArray*WhiteNoiseFourier </code></pre>
-                Note that the above multiplication is carried out with the Times function, not Dot. Using Dot would have resulted in matrix multiplication, which is not what we want here.</li>
+            <li>Finally, we mutiply the \(a,b\) entry of <code>sqrtPowerSpectrumArray</code> by the \(a,b\) entry of <code>WhiteNoiseFourier</code> to get \(\Phi^{\bfk}_{ab}\):
+                <pre class="prettyprint"><code class="lang-mma">PowerSpectrumRealizationFourier=sqrtPowerSpectrumArray*WhiteNoiseFourier </code></pre>
+                Note that the above multiplication is carried out with the <code>Times</code> function, not <code>Dot</code>. </li>
             </ol>
 
             <h4>Plotting the Realization</h4>
 
             <p>
-                Finally, we transform from 
- and plot the result. This is done in a single command as:
+                Finally, we transform from \(\Phi^{\bfk}_{ab}\longrightarrow \phi^{\bfx}_{ab}\) and plot the result.
+ This is done in a single command as:
             </p>
 
 
             <pre class="prettyprint"><code class="lang-mma">MatrixPlot[Re[InverseFourier[PowerSpectrumRealizationFourier]]]  </code></pre>
 
             <p>
-                Above, the real part of the transform was taken using Re because numerical errors induce tiny imaginary components in the final calculation of 
-. The results of the realization for various power spectra can be seen in Fig. 2.
+                Above, the real part of the transform was taken using <code>Re</code> because numerical errors induce tiny imaginary components in the final calculation of \(\phi^{\bfx}_{ab}\).
+                The results of the realization for various power spectra can be seen in Fig. 2.
             </p>
 
-            <p>IMAGES</p>
+            <figure class="center">
+                <img width="800" src="img/GaussianFieldsFivePowerLaws.png">
+                <figcaption> Fig. 2: Realizations for \(P(k)=k^{-n}\) with \(n\in\{0,1,2,3,4\}\) from left to right. The \(n=0\) realization is white noise while the \(n=2\) realization is scale invariant. The length scale over which fluctuations are correlated increases as \(n\) increases.</figcaption>
+            </figure>
 
 
-            <h4>An Example in </h4>
+            <h3>An Example in \(d=3\)</h3>
 
             <p>
-                Finally, we present the results of a higher dimensional realization: Fig. 3 is a GIF which shows successive slices of a  realization for a power spectrum .
+                Finally, we present the results of a higher dimensional realization: Fig. 3 is a GIF which shows successive slices of a \(d=3\) realization for a power spectrum \(P(k)=k^{-4}\).
             </p>
             
-            <p>IMAGE</p>
+            <figure class="center">
+                <img width="400" src="img/anim.gif">
+                <figcaption> Fig. 3: Slices of a \(d=3\) realization. A scale invariant power spectrum \(P(k)\propto k^{-3}\) is more physically relevant, e.g. for inflation, but leads to a less interesting GIF.</figcaption>
+            </figure>
 
             <h4>References and Files </h4>
 
             <ul class="color-dot-ul">
-                <li> The <em>Mathematica</em> code we used was heavily based on this Stack Exchange post.</li>
-                <li> A minimal <em>Mathematica</em> notebook implementing the above can be downloaded here.</li>
-                <li>Eugene Lim’s excellent non-Gaussianity notes begin with a section on Gaussian fields.</li>
+                <li><a href="https://mathematica.stackexchange.com/questions/4829/efficiently-generating-n-d-gaussian-random-fields" target="_blank">The <em>Mathematica</em> code we used was heavily based on this Stack Exchange post.</a></li>
+                <li><a href="files/GaussianRealizationsMinimalNotebook.nb" target="_blank">A minimal <em>Mathematica</em> notebook implementing the above can be downloaded here.</a></li>
+                <li><a href="http://www.damtp.cam.ac.uk/user/eal40/AdvCos/lecture2.pdf" target="_blank">Eugene Lim’s excellent non-Gaussianity notes begin with a section on Gaussian fields.</a></li>
             </ul>
 
             
