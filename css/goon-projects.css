@@ -18,6 +18,14 @@ http://www.templatemo.com/tm-441-volton
     --cambridge-blue: rgba(163, 193, 173, 0.99);
     --crimson-red: rgba(153, 0, 0, 0.99);
     --cornell-blue: rgba(0,104,172,0.99);
+    --font-off-white: #f5e7e7;
+    --font-off-white-inverted: #0a1818;
+    --grey-background: #16181d;
+    --baby-blue: #77c1e6;
+    --h1-color: #fa5656;
+    --h2-color: #f77f7f;
+    --h3-color: #f7abab;
+    --h4-color: #facece;
   }
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
@@ -43,19 +51,24 @@ h6 {
   word-wrap: break-word; }
 
 h1 {
-  font-size: 3.77em; }
+  font-size: 3.77em;
+  color: var(--h1-color);
+ }
 
 h2 {
   font-size: 2.11em;
+  color: var(--h2-color);
  }
 
 h3 {
   font-size: 1.55em;
-
+  color: var(--h3-color);
  }
 
 h4 {
-  font-size: 1em; }
+  font-size: 1em;
+  color: var(--h4-color);
+ }
 
 .blue {
 	color: #06C;
@@ -224,7 +237,8 @@ textarea {
 body {
   font-size: 19px;
   line-height: 24px;
-  color: #000000;
+  color: var(--font-off-white);
+  background-color: var(--grey-background);
   font-family: 'Lato', sans-serif;
   overflow-x: hidden;
 }
@@ -232,7 +246,7 @@ body {
 
 
 a {
-  color: #006699;
+  color: var(--baby-blue);
   -webkit-transition: all 150ms ease-in-out;
   -moz-transition: all 150ms ease-in-out;
   -ms-transition: all 150ms ease-in-out;
@@ -683,10 +697,9 @@ ul {
   line-height: 2;
 }
 
-/* h3 color and spacing */
+/* h3 spacing */
 
 h3 {
-  color: var(--crimson-red);
   margin-top: 20px;
   margin-bottom: 20px;
  }
@@ -694,9 +707,17 @@ h3 {
  /* black border */
 
  .black-border {
-   border: 1px solid black;
-   padding: 5px 10px 5px 10px;
- }
+  border: 1px solid black;
+  padding: 5px 10px 5px 10px;
+}
+
+
+ /* white border */
+
+ .white-border {
+  border: 1px solid white;
+  padding: 5px 10px 5px 10px;
+}
 
  /* changing pretty print borders */
 
@@ -733,3 +754,14 @@ h3 {
  h4 {
    margin-top: 30px;
  }
+
+
+ 
+/* For shadow on text */
+
+.box_textshadow {
+  text-shadow: 2px 2px 2px rgb(253, 232, 232); /* FF3.5+, Opera 9+, Saf1+, Chrome, IE10 */
+}
+
+
+
