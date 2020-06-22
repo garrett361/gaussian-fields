@@ -285,7 +285,7 @@
 
             <ol>
                 <li> Start with a white noise field with unit amplitude \(\varphi_{\bfk}\) obeying \(\langle \varphi_{\bfk}\varphi_{-\bfk}\rangle'=1\).  </li>
-                <li> Generate a position space realization of the white noise, denoted by \(R_{\rm white}(\bfx)\).  That is, \(R_{\rm white}(\bfx)\) is a particular map showing the values of \(\varphi\) at varoius positions \(\bfx\) and for which \(\langle\varphi(\bfx)\varphi(\bfy)\rangle'=\delta^{d}(\bfx-\bfy)\).</li>
+                <li> Generate a position space realization of the white noise, denoted by \(R_{\rm white}(\bfx)\).  That is, \(R_{\rm white}(\bfx)\) is a particular map showing the values of \(\varphi\) at various positions \(\bfx\) and for which \(\langle\varphi(\bfx)\varphi(\bfy)\rangle'=\delta^{d}(\bfx-\bfy)\).</li>
                 <li> Fourier transform the realization: \(R_{\rm white}(\bfx)\longrightarrow R_{\rm white}(\bfk)\).</li>
                 <li> Multiply \(R_{\rm white}(\bfk)\) by the square root of the power spectrum to create \(R_P(\bfk)=P^{1/2}(k)R_{\rm white}(\bfk)\).</li>
                 <li> Fourier transform \(R_P(\bfk)\) back to positio space to get the desired realization: \(R_P(\bfx)=\int\rd^d \tilde{k}\, e^{i\bfk\cdot\bfx} R_P(\bfx)\).</li>
@@ -389,7 +389,7 @@
 
             <p>
                 This is important because if we did the naive construction and took the white noise realization values \(\varphi^{\bfk}_{ab}\)
- and simply multiplied by \(P^{1/2}(k)\) with \(k=\frac{1}{2\pi N}\sqrt{a^2+b^2}\) to build \(\phi^{\bfk}_{ab}=P^{1/2}(k)\varphi^{\bfk}_{ab}\), then we'd find \(\phi^{*\bfk}_{a(N/2+b)}\neq\phi^{\bfk}_{a(N/2-b)}\), due to the power spectrum factor. 
+ and simply multiplied by \(P^{1/2}(k)\) with \(k=\frac{2\pi}{ N}\sqrt{a^2+b^2}\) to build \(\phi^{\bfk}_{ab}=P^{1/2}(k)\varphi^{\bfk}_{ab}\), then we'd find \(\phi^{*\bfk}_{a(N/2+b)}\neq\phi^{\bfk}_{a(N/2-b)}\), due to the power spectrum factor. 
  If we then transformed the naive \(\phi^{\bfk}_{ab}\), we would be led to an imaginary \(\phi^{\bfx}_{ab}\).  We can get around this issue by building the array \(\Phi^{\bfk}_{ab}\) whose components are given by:
             </p>
 
@@ -404,7 +404,7 @@
             \]
 
             <p>
-                In the second line above, the \(k\) in \(P^{1/2}(k)\varphi^{\bfk}_{a(b-N)}\) is evaluated at \(k=\frac{1}{2\pi N}\sqrt{a^2+(b-N)^2}\) and similar for other lines. 
+                In the second line above, the \(k\) in \(P^{1/2}(k)\varphi^{\bfk}_{a(b-N)}\) is evaluated at \(k=\frac{2\pi}{N}\sqrt{a^2+(b-N)^2}\) and similar for other lines. 
                 The factors of \(N\) can also be removed in the indices of the \(\varphi^{\bfk}\)'s, using the previously mentioned properties of \(\varphi^{\bfk}\).
             </p>
 
