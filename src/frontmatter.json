@@ -1,0 +1,23 @@
+{
+	"title": "Gaussian Fields",
+	"authors": [
+		{
+			"author": "Garrett Goon",
+			"authorURL": "https://www.garrettgoon.com/"
+		}
+	],
+	"katex": {
+		"delimiters": [
+			{
+				"left": "$",
+				"right": "$",
+				"display": false
+			},
+			{
+				"left": "$$",
+				"right": "$$",
+				"display": true
+			}
+		]
+	}
+}
