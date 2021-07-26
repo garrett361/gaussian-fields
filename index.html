@@ -1,0 +1,695 @@
+<!doctype html>
+
+<!-- Any figures to-be called with <img ...> should be placed in /static and called 
+as with /static as their root. E.g. <img src="/diagrams/fig1.png">
+-->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <script src="https://distill.pub/template.v2.js"></script>
+</head>
+
+<body>
+
+
+  <!-- Commented out author/affiliation/etc header
+    
+  
+
+-->
+
+  <d-title>
+    <h1>Gaussian Fields</h1>
+    <p>What they are and how to generate them simply.</p>
+  </d-title>
+
+  <d-article>
+
+    <p>
+      <u>Note:</u> A python (Jupyter notebook) implementation of the <em>Mathematica</em> code below, with some
+      modifications
+      and additions, can now be found at
+      <a href="https://github.com/garrett361/cmbpy" target="_blank">on my GitHub page.</a>
+    </p>
+
+    <h4>Introduction</h4>
+
+    <p>
+      In Cosmology, we are often interested in understanding the spatial correlations amongst fluctuations
+      of various kinds.
+
+    </p>
+
+    <p>
+      The most well-known example is that of temperature fluctuations in the Cosmic Microwave
+      Background (CMB). The light which travels to us from the primordial universe is very nearly, but not quite,
+      homogeneous.
+      The important deviations from homogeneity are captured by the statistics of the fluctuations about this constant
+      background. For instance, one
+      could choose a fixed angle and average the product of fluctuations separated by this angle over the entire sky. A
+      non-zero result demonstrates correlations between spatially separated regions. Repeating this experiment for
+      various angles reveals the full spatial dependence of such correlations which encodes important
+      information about the early universe.
+    </p>
+
+    <p>
+      One can imagine performing the above experiment on the fluctuation map below, which clearly shows fluctuations
+      which are correlated on different spatial scales.
+    </p>
+
+    <figure>
+      <img src="images/gaussian.svg">
+      <figcaption> A realization of a Gaussian random field. The statistics of the realization are fully encoded in the
+        two-point function <d-math>\langle
+          \phi({\bf x})\phi({\bf y})\rangle</d-math>, due to its Gaussian nature.</figcaption>
+    </figure>
+
+    <p>
+      Such fluctuations are described by <em>random fields</em>, which are the generalization of random variables
+      to quantities which take on different values at different points in space (and/or time). Denoting such fields by
+      <d-math>\phi({\bf x})</d-math>, their statistics are characterized by <em>correlation functions</em> of the form
+      <d-math>\langle
+        \phi({\bf x})\phi({\bf y})\rangle</d-math> (computed as in the CMB thought experiment above), where the angled
+      brackets indicate an expectation value.
+      While we can also consider higher-point correlation functions involving additional powers of the field <d-math>
+        \phi({\bf x})</d-math>,
+      there exists a special <em>Gaussian</em> limit in which all higher-order correlators are determined by the
+      two-point function and we will primarily focus on this regime.
+    </p>
+
+
+    <p>
+      Because of the homogeneous and isotropic nature of spatial slices, it’s convenient to discuss the
+      Fourier transform of the correlator which takes on the form
+      <d-math>\langle\phi_{{\bf k}}\phi_{-{\bf k}}\rangle'=P(k)</d-math> where the power spectrum, <d-math>P(k)</d-math>
+      , only depends on
+      the magnitude of <d-math>{\bf k}</d-math>, as indicated (see below for more on the notation).
+      <d-math>P(k)</d-math> thus fully determines the properties of homogeneous, isotropic, Gaussian random fields and
+      hence it plays a central role.
+    </p>
+
+    <p>
+      However, if handed a <d-math>P(k)</d-math>, it’s not
+      very easy to visualize what a
+      corresponding spatial map of fluctuations would look like, making it somewhat hard to gain intuition for what a
+      given power spectrum means.
+      It would be nice to know how to generate fluctuation maps of the sort in the above figure.
+    </p>
+
+    <p>
+      <b>In this post we answer the following question:</b> <em> for a given <d-math>P(k)</d-math> which
+        describes a Gaussian random field, how do we generate a simple fluctuation map which has the
+        correlations described by this power spectrum?</em>
+    </p>
+
+    <p>
+      We start by reviewing some of the theory behind random Gaussian fields, which I found difficult to
+      find in any one place in the literature, and then move on to the practical construction of our maps
+      using <em>Mathematica</em>. A sample <em>Mathematica</em> notebook <d-footnote id="d-footnote-jupyter">
+        <a href="https://github.com/garrett361/cmbpy" target="_blank">GitHub link to my Jupyter notebook implementing
+          similar methods to my <em>Mathematica</em> code.</a>
+      </d-footnote> is included at the end of the post. The methods used
+      for constructing the realization are by no means optimal; our goal is just to understand a quick and
+      dirty method of generating realizations.
+    </p>
+
+
+    <!-- Theory Background -->
+
+
+    <h2> Theory Background</h2>
+
+
+
+    <p>
+      We start by reviewing the necessary theory background.
+    </p>
+
+    <h3> Correlators </h3>
+
+    <p>
+      First, we set notation and review basic facts about equal time correlators of scalar quantities. We
+      focus only on two-point functions.
+    </p>
+
+
+    <p>
+      A homogeneous, isotropic position space two-point corrrelator only depends on the magnitude of the
+      distance between the points of interest: <d-math>\langle \phi({\bf x})\phi({\bf y})\rangle=A(|{\bf x}-{\bf y}|)
+      </d-math>. Due
+      to this fact, the Fourier transformed correlator is proportional to a delta function and only
+      depends on the magnitude of the momentum (i.e. wavevector):
+    </p>
+
+    <d-math block="">
+      \langle \phi_{{\bf k}}\phi_{{\bf p}}\rangle\equiv\int{\rm d}^{d}x{\rm d}^{d}y\,
+      e^{-i{\bf k}\cdot{\bf x}-i{\bf p}\cdot{\bf y}}\langle \phi({\bf x})\phi({\bf
+      y})\rangle=P(k)\tilde{\delta}^{d}({\bf k}+{\bf p})\ ,
+    </d-math>
+
+    <p>
+      where we use <d-math>\tilde{\delta}({\bf k}+{\bf p})\equiv (2\pi)^{d}\delta^{d}({\bf k}+{\bf p})</d-math> and
+      later
+      <d-math>\tilde{{\bf k}}\equiv {\bf k}/(2\pi)</d-math> to minimize the number of explicit <d-math>2\pi</d-math>
+      factors.
+      appearing. We also put primes on correlators which have their associated delta-functions and <d-math>2\pi</d-math>
+      factors removed, as in
+      <d-math>\langle \phi_{{\bf k}}\phi_{-{\bf k}}\rangle'=P(k)</d-math>.
+    </p>
+
+
+    <p>
+      Two functional forms of the power spectrum are particularly important: white noise and scale
+      invariant power spectra.
+    </p>
+
+    <p>
+      <b>White Noise:</b>
+      <d-math>P(k)\propto C</d-math> with <d-math>C</d-math> constant. This corresponds to a position space
+      correlator of the form <d-math>\langle \phi({\bf x})\phi({\bf y})\rangle\propto C\delta^{d}({\bf x}-{\bf y})
+      </d-math>, i.e.
+      there are no correlations between fluctuations at separated points if the power spectrum is
+      described by white noise.
+    </p>
+
+    <p>
+      <b>Scale Invariant:</b>
+      <d-math>P(k)\propto k^{-d}</d-math> in <d-math>d</d-math> spatial dimensions. A scale invariant
+      <d-footnote id="d-footnote-scale-invariance">
+        Inflation predicts a nearly-scale-invariant power spectrum, <d-math>P(k)\propto k^{-d+n_{s}-1}</d-math>, where
+        the spectral tilt <d-math>n_{s}</d-math>, defined in this manner for historical reasons, is generically
+        predicted to be slightly <em>red</em>, meaning <d-math>n_{s}-1</d-math> is small and negative, so that <d-math>
+          P(k)</d-math> grows with decreasing <d-math>k</d-math>. A red spectrum corresponds to larger fluctuations at
+        larger physical distance scales. <a href="https://arxiv.org/abs/1807.06209v1" target="_blank">
+          Planck 2018's bounds on the scalar tilt are <d-math>n_{s}= 0.9649 \pm 0.0042</d-math>
+          <d-cite key="Planck:2018vyg"></d-cite>.
+        </a>
+      </d-footnote>
+      power spectrum corresponds to fluctuations which have the same correlations no matter how separated
+      the
+      two points are: <d-math>\langle \phi(\lambda{\bf x})\phi(\lambda{\bf y})\rangle=\langle
+        \phi({\bf x})\phi({\bf y})\rangle</d-math> for all <d-math>\lambda</d-math>.
+    </p>
+
+    <!-- PDFs -->
+
+    <h3> Probability Distributions: Functions and Functionals </h3>
+
+    <p>We now review how probability distributions work for continuous, Gaussian random fields. We start
+      with a brief review of the analogous theory for continuous random variables. </p>
+
+    <p>
+      <b>Probability Distribution Functions (PDF):</b> Given some continuous random variable <d-math>q</d-math>, the
+      probability that <d-math>q</d-math> lies in some range <d-math>{\rm d} q</d-math> is given by <d-math>
+        \mathcal{P}(q){\rm d} q</d-math>, where <d-math>\mathcal{P}(q)</d-math> is
+      the PDF. The PDF is normalized as <d-math>\int\mathcal{P}(q){\rm d} q=1</d-math> and the expectation value of
+      <d-math>q^{n}</d-math> is
+      given by
+    </p>
+
+    <d-math block="">
+      \langle q^n\rangle= \int{\rm d} q\, \mathcal{P}(q)q^n
+    </d-math>
+
+
+    <p>
+      The Gaussian PDF is of primary importance. For <d-math>n</d-math> random variables, <d-math>q_i</d-math>, the
+      Gaussian PDF
+      takes on the form:
+    </p>
+
+    <d-math block="">
+      \mathcal{P}^{\rm Gauss.}(q_1,\ldots,q_n)=\sqrt{\frac{\det
+      (A)}{(2\pi)^n}}\exp\left[-\frac{1}{2}q_iA_{ij}q_j\right]\ ,
+    </d-math>
+
+    <p>
+      where <d-math>A_{ij}</d-math> is some positive definite matrix (and sums over repeated indices are implicit). The
+      corresponding Gaussian two-point statistics are then given by:
+    </p>
+
+    <d-math block="">
+      \langle q_i q_j\rangle =\left(\prod_{k=1}^{n}\int {\rm d} q_k\right)\mathcal{P}^{\rm
+      Gauss.}(\vec{q})q_iq_j=A^{-1}_{ij}
+    </d-math>
+
+    <p> where <d-math>A^{-1}_{ij}</d-math> is the inverse of the matrix <d-math>A_{ij}</d-math>. All higher-order
+      correlators involving more factors of <d-math>q_{i}</d-math> can be written in terms of <d-math>A_{ij}</d-math>, a special property of the Gaussian distribution.</p>
+
+    <p>
+      Probability Distribution <em>Functionals</em> are perhaps less familiar, but they are exactly the
+      same idea as PDFs simply applied to the case of random <em>fields</em> such as <d-math>\phi({\bf x})</d-math>,
+      rather than random variables such as <d-math>q_i</d-math>. We will only focus on the case of Gaussian functionals
+      whose form and properties are defined in exact analogy to the PDF case. Starting with a position
+      space field <d-math>\phi({\bf x})</d-math>, the Gaussian functional <d-math>\mathcal{P}(\phi({\bf x}))</d-math> is
+      written as
+    </p>
+
+    <d-math block="">
+      \mathcal{P}[\phi({\bf x})]\propto \exp\left[-\frac{1}{2}\int{\rm d}^dx{\rm d}^dy\, \phi({\bf y})A({\bf y},{\bf
+      z})\phi({\bf z})
+      \right]
+    </d-math>
+
+    <p>
+      where we have omitted the normalization factor. Correlators are then computed by a path integral
+      over all field values <d-math>\phi({\bf x})</d-math>. The outcome of the integral is determined in analogy to the
+      PDF case. For instance, the two-point correlator is:
+    </p>
+
+    <d-math block="">
+      \langle \phi({\bf x})\phi({\bf y})\rangle\equiv \int\mathcal{D}\phi\,
+      \mathcal{P}[\phi({\bf x})]\phi({\bf y})\phi({\bf z})=A^{-1}({\bf y},{\bf z})\ ,
+    </d-math>
+
+    <p>
+      where <d-math>A^{-1}({\bf y},{\bf z})</d-math> obeys
+    </p>
+
+    <d-math block="">
+      \int{\rm d}^dy\, A({\bf x},{\bf y})A^{-1}({\bf y},{\bf z})=\delta^{d}({\bf x}-{\bf z})\ .
+    </d-math>
+
+    <p>
+      White noise corresponds to the simple case where <d-math>A({\bf x},{\bf z})=C\delta^{d}({\bf x}-{\bf z})</d-math>
+      and so
+      <d-math>A^{-1}({\bf x},{\bf z})=\frac{1}{C}\delta^{d}({\bf x}-{\bf z})</d-math>, for instance. Assuming spatial
+      homogeneity
+      and isotropy, it is straightforward to Fourier transform the above formulas in order to derive their
+      momentum space analogues:
+
+      <d-math block="">
+        \mathcal{P}[\phi_{{\bf k}}]\propto \exp\left[-\frac{1}{2}\int{\rm d}^{d}\tilde{q}{\rm d}^{d}\tilde{p}\,
+        \phi_{{\bf q}}A(q)\tilde{\delta}^{d}({\bf q}+{\bf p})\phi_{{\bf p}}\right]
+      </d-math>
+
+      and
+
+      <d-math block="">\langle\phi_{{\bf
+        k}}\phi_{{\bf k}'}\rangle=\frac{\tilde{\delta}^{d}({\bf k}+{\bf k}')}{A(k)}\ .
+      </d-math>
+    </p>
+
+    <p>
+      Clearly, the function <d-math>A(k)</d-math> above is simply the inverse of the power spectrum:
+      <d-math>P(k)=A^{-1}(k)</d-math>. By adding terms cubic and higher order in <d-math>\phi_{\bf k}</d-math> to the
+      exponential in
+      <d-math>\mathcal{P}[\phi_{\bf k}]</d-math>, the distribution is made non-Gaussian. The search for non-Gaussian
+      signatures in
+      Cosmological statistics is part of cutting-edge experimental efforts, but further discussion
+      <d-footnote id="d-footnote-non-gaussianity">
+        <a href="https://arxiv.org/abs/1903.04409" target="_blank">
+          The Astro2020 Science White Paper on Primordial Non-Gaussianity
+        </a>
+        <d-cite key="Meerburg:2019qqi"></d-cite>
+        (which I was involved in) gives a research-level argument for the important role that non-Gaussianity plays in
+        understanding
+        the early universe. A pedagogical introduction to non-Gaussianity in inflation can alternatively be found in
+        <a href="https://nms.kcl.ac.uk/eugene.lim/AdvCos/lecture2.pdf" target="_blank">
+          Eugene Lim’s excellent notes on the subject</a>
+        <d-cite key="EugeneLimNGNotes"></d-cite>.
+      </d-footnote>
+      of these issues falls outside of the scope of this post.
+    </p>
+
+
+
+    <!-- Implementation -->
+
+    <h2> Implementation</h2>
+
+
+
+    <p>
+      We now demonstrate how to generate a realization, given <d-math>P(k)</d-math>. We first present the logic and
+      outline the steps in the process. Then we show how to practically implement these ideas in
+      <em>Mathematica</em>.
+    </p>
+
+    <h3> The Logic and Steps</h3>
+
+    <p>
+      The logic is simple: if we’re given a white noise field <d-math>\varphi_{\bf k}
+      </d-math>
+      which has <d-math>\langle \varphi_{{\bf k}}\varphi_{-{\bf k}}\rangle'=1</d-math>
+      , then we can create a field with the desired power spectrum simply by defining <d-math>\phi_{\bf k}\equiv
+        P^{1/2}(k)\varphi_{\bf k}</d-math>. The new field has the desired statistics, by construction, since
+      <d-math block="">
+        \langle \varphi_{\bf k} \varphi_{-{\bf k}}\rangle'= P(k)\langle \phi_{\bf k} \phi_{-{\bf k}}\rangle'=P(k)\ .
+      </d-math>
+    </p>
+
+
+    <p>
+      Spelled out in more detail, we will perform the following steps:
+    </p>
+
+    <ol>
+      <li> Consider a white noise field of unit amplitude: <d-math>\varphi_{{\bf k}}</d-math> with <d-math>\langle
+          \varphi_{{\bf k}}\varphi_{-{\bf k}}\rangle'=1</d-math>. </li>
+      <li> Generate a position space realization of the white noise, denoted by <d-math>R_{\rm white}({\bf x})</d-math>.
+        That is, <d-math>R_{\rm white}({\bf x})</d-math> is a particular map showing the values of <d-math>\varphi({\bf
+          x})
+        </d-math> at various positions <d-math>{\bf x}</d-math> and for which <d-math>\langle\varphi({\bf
+          x})\varphi({\bf y})\rangle'=\delta^{d}({\bf x}-{\bf y})</d-math>.
+      </li>
+      <li> Fourier transform the realization: <d-math>R_{\rm white}({\bf x})\longrightarrow R_{\rm white}({\bf k})
+        </d-math>.
+      </li>
+      <li> Multiply <d-math>R_{\rm white}({\bf k})</d-math> by the square root of the power spectrum to create
+        <d-math>R_P({\bf k})=P^{1/2}(k)R_{\rm white}({\bf k})</d-math>.
+      </li>
+      <li> Fourier transform <d-math>R_P({\bf k})</d-math> back to position space to get the desired realization:
+        <d-math>R_P({\bf x})=\int{\rm d}^d \tilde{k}\, e^{i{\bf k}\cdot{\bf x}} R_P({\bf x})</d-math>.
+      </li>
+    </ol>
+
+
+
+
+
+    <p>
+      Therefore, given a realization of the white noise field , we just have to multiply its Fourier space
+      realization by and inverse Fourier transform to get a position space realization of <d-math>\phi({\bf x}).
+      </d-math>
+    </p>
+
+    <p>
+      The key fact is that generating a white noise realization is easy: since spatially separated points are
+      uncorrelated, white noise is generated by independently drawing each pixel value from a normal distribution.
+    </p>
+
+    <p>
+      The above presentation is slightly idealized, as we’ll have to make the realization on a discrete grid; we won’t be
+      able to work with continuous variables. Practical considerations which arise from working on a
+      lattice are covered in the following sections.
+    </p>
+
+    <!-- Continuous to Discrete -->
+
+    <h3> From Continuous to Discrete</h3>
+
+    <p>
+      For concreteness, we focus on creating two-dimensional realizations on <d-math>N\times N</d-math> grids, with
+      <d-math>N</d-math> an even number. The generalization to higher dimensions is straightforward. In passing to a
+      lattice, our continuous fields <d-math>\phi({\bf x})</d-math> and <d-math>\phi_{\bf k}</d-math> are replaced by
+      the discrete
+      quantities <d-math>\phi^{{\bf x}}_{ab}</d-math> and <d-math>\phi^{{\bf k}}_{ab}</d-math>, respectively, where
+      <d-math>a,b\in\{0,\ldots,N-1\}</d-math>. <d-math>\phi^{{\bf x}}_{ab}</d-math>
+      is the value of the field at the point <d-math>(a,b)</d-math> on the grid. The continuous Fourier transform which
+      related <d-math>\phi^{{\bf x}}_{ab}</d-math> and <d-math>\phi^{{\bf k}}_{ab}</d-math> is replaced by a discrete
+      one:
+    </p>
+
+
+    <d-math block="">
+      \phi^{{\bf k}}_{ab}=\sum_{c,d=0}^{N-1}\exp\left(-ix_ck_a-ix_dk_b\right)\phi^{{\bf x}}_{cd}\ , \quad
+      \phi^{{\bf x}}_{ab}=\frac{1}{N^2}\sum_{c,d=0}^{N-1}\exp\left(ix_ck_a+ix_dk_b\right)\phi^{{\bf k}}_{cd}
+    </d-math>
+
+    <p>
+      where <d-math>x_a\equiv a</d-math> and <d-math>k_a\equiv \frac{2\pi a}{N}</d-math>. Given real <d-math>\phi^{{\bf
+        x}}_{ab}</d-math> and even
+      <d-math>N</d-math>, <d-math>\phi^{{\bf k}}_{ab}</d-math> has the following properties
+    </p>
+
+    <ul class="color-dot-ul">
+      <li>
+        <d-math>\phi^{{\bf k}}_{ab}=\phi^{{\bf k}}_{(a+\alpha N)b}=\phi^{{\bf k}}_{a(b+\alpha N)}</d-math> for any
+        integer
+        <d-math>\alpha</d-math>
+      </li>
+      <li>
+        <d-math>\phi^{*{\bf k}}_{ab}=\phi^{{\bf k}}_{-a-b}</d-math>
+      </li>
+    </ul>
+
+    <p>
+      The above further imply the following important property:
+      <d-math>\phi^{*{\bf k}}_{a(N/2+b)}=\phi^{{\bf k}}_{a(N/2-b)}</d-math> and similar with the other index.
+    </p>
+
+    <!-- Building a Realization -->
+
+    <h3> Building a Realization</h3>
+
+    <p>
+      Now we walk through the steps involved in actually building a realization in <em>Mathematica</em>.
+    </p>
+
+    <h4> White Noise</h4>
+
+    <p>
+      First, we construct a grid of white noise. When passing to the grid, the unit white noise
+      probability distribution functional becomes the following ordinary PDF:
+
+
+      <d-math block="">
+        \mathcal{P}[\varphi({\bf x})]\longrightarrow
+        \mathcal{P}[\varphi^{{\bf x}}_{ab}]=\prod_{c,d=0}^{N-1}\frac{\exp\left[-\frac{1}{2}\left(\phi^{{\bf
+        x}}_{cd}\right)^2\right]}{\sqrt{2\pi}}\ .
+      </d-math>
+    </p>
+
+    <p>
+      By drawing pixel values from a normal distribution we can generated a white-noise realization as in Fig. 1
+      below.
+    </p>
+
+
+
+    <figure>
+      <img src="images/white_noise.svg">
+      <figcaption> Fig. 1: A 1024 x 1024 realization of white noise generated in <em>Mathematica</em>.</figcaption>
+    </figure>
+
+
+    <p>
+      In <em>Mathematica</em>, the white noise array can be generated via:
+    </p>
+
+    <d-code block="" language="javascript">
+      WhiteNoise = RandomVariate[NormalDistribution[], {Nsize, Nsize}]
+    </d-code>
+
+
+    <p>
+      where <d-code language="javascript">Nsize</d-code> is the size of the grid.
+      <d-code language="javascript">WhiteNoise</d-code> is our realization <d-math>R_{\rm white}({\bf x})</d-math> and
+      building <d-math>R_{\rm
+        white}({\bf k})</d-math> is very simple: we just pass <d-code language="javascript">WhiteNoise</d-code> through
+      the
+      built-in
+      <code>Fourier</code> function:
+    </p>
+
+    <d-code block="" language="javascript">
+      WhiteNoiseFourier = Fourier[WhiteNoise]
+    </d-code>
+
+
+
+    <h4> Constructing the Fourier Realization (and Indexing Conventions)</h4>
+
+    <p>
+      The Fourier space realization then needs to be multiplied by the square root of the power spectrum.
+      Some care must be taken to ensure that the resulting field <d-math>\phi^{{\bf k}}_{ab}</d-math>
+      obey the reality condition derived in the previous section,
+      <d-math>\phi^{*{\bf k}}_{a(N/2+b)}=\phi^{{\bf k}}_{a(N/2-b)}</d-math>.
+
+    </p>
+
+    <p>
+      If we did the naive construction and took the white noise realization
+      values <d-math>\varphi^{{\bf k}}_{ab}</d-math>
+      and simply multiplied by <d-math>P^{1/2}(k)</d-math> with <d-math>k=\frac{2\pi}{ N}\sqrt{a^2+b^2}</d-math> to
+      build
+      <d-math>\phi^{{\bf k}}_{ab}=P^{1/2}(k)\varphi^{{\bf k}}_{ab}</d-math>, then we'd find
+      <d-math>\phi^{*{\bf k}}_{a(N/2+b)}\neq\phi^{{\bf k}}_{a(N/2-b)}</d-math>, due to the power spectrum factor.
+      Such a <d-math>\phi^{{\bf k}}_{ab}</d-math> would corresponding to imaginary
+      <d-math>\phi^{{\bf x}}_{ab}</d-math>. The array <d-math>
+        \phi^{{\bf k}}_{ab}</d-math> can instead be properly constructed as in
+    </p>
+
+    <d-math block="">
+      \phi^{{\bf k}}_{ab}=
+      \begin{cases}
+      P^{1/2}(k)\varphi^{{\bf k}}_{ab} & a,b\le N/2\\
+      P^{1/2}(k)\varphi^{{\bf k}}_{a(b-N)} & a\le N/2, b>N/2\\
+      P^{1/2}(k)\varphi^{{\bf k}}_{(a-N)b} & a> N/2, b\le N/2\\
+      P^{1/2}(k)\varphi^{{\bf k}}_{(a-N)(b-N)} & a,b> N/2
+      \end{cases}\ .
+    </d-math>
+
+    <p>
+      In the second line above, the <d-math>k</d-math> in <d-math>P^{1/2}(k)\varphi^{{\bf k}}_{a(b-N)}</d-math> is
+      evaluated at
+      <d-math>k=\frac{2\pi}{N}\sqrt{a^2+(b-N)^2}</d-math> and similar for other lines.
+      The factors of <d-math>N</d-math> can also be removed in the indices of the <d-math>\varphi^{{\bf k}}</d-math>'s,
+      using the
+      previously mentioned properties of <d-math>\varphi^{{\bf k}}</d-math>.
+    </p>
+
+    <p>
+      Note that these manipulations effectively result in the the <d-math>a,b</d-math> indices running over the values
+      <d-math>\{0,\ldots, N/2,-N/2+1,\ldots,-1\}</d-math>, rather than <d-math>\{0,\ldots, N-1\}</d-math>. For this
+      reason, it is
+      common (but not entirely universal)
+      to index discrete Fourier transforms with index values running over precisely this set. For
+      instance, <em>Mathematica</em> and <em>NumPy</em> both use this
+      convention.
+
+    </p>
+
+    <p>
+      In the limit <d-math>P(k)\to 1</d-math>, Fourier transforming <d-math>\phi^{{\bf k}}_{ab}</d-math>
+      yields the original position space white noise realization we started with, <d-math>\varphi^{{\bf k}}_{ab}
+      </d-math>,
+      despite the above manipulations. The position space field
+      is then built via
+    </p>
+
+    <d-math block="">
+      \phi^{{\bf x}}_{ab}=\frac{1}{N^2}\sum_{c,d=0}^{N-1}\exp\left(ix_ck_a+ix_dk_b\right)\phi^{{\bf k}}_{cd}\ .
+    </d-math>
+
+    <p>
+      This field realizes the desired spectrum. The construction of
+      can be carried out in <em>Mathematica</em> as follows:
+    </p>
+
+    <ol>
+      <li> We first build the vector of momenta with the indexing discussed above, <d-math>k_a=\frac{2\pi}{N}(0,\ldots,
+          N/2,-N/2+1,\ldots, -1)</d-math>, via:
+
+        <d-code block="" language="javascript">
+          kVector = N[(2*Pi/Nsize) * Join[Range[0, Nsize/2], Range[-Nsize/2+1, -1]]]
+        </d-code>
+
+      </li>
+      <li>Next, build the power spectrum function. Take it to be of the power law form: <d-math>P(k)\propto
+          k^{-n}</d-math>. Because this <d-math>P(k)</d-math> is divergent at <d-math>k=0</d-math> (assuming <d-math>n>0
+        </d-math>), we will set the
+        value of the power spectrum to zero at this one point. This is implemented in
+        <em>Mathematica</em> as:
+        <d-code block="" language="javascript">
+          PowerLawPowerSpectrum[n_,k_] := If[k==0,0,1/Abs[k^n]]
+        </d-code>
+
+      </li>
+      <li>We want to evaluate <d-math>P^{1/2}(k)</d-math> at all points <d-math>(k_a,k_b)</d-math> with <d-math>
+          k=\sqrt{k_a^2+k_b^2}</d-math>.
+        This array is constructed using the <code>Outer</code> command:
+        <d-code block="" language="javascript">
+          sqrtPowerSpectrumArray = Outer[N[Sqrt[PowerLawPowerSpectrum[n, Norm[{##}]]]]&, kVector, kVector]
+        </d-code>
+        where <d-code language="javascript">n</d-code> should be replaced by the desired number determining the power
+        law.
+      </li>
+      <li>Finally, we mutiply the <d-code language="javascript">a, b</d-code> entry of
+        <d-code language="javascript">sqrtPowerSpectrumArray</d-code> by the <d-code language="javascript">a, b</d-code>
+        entry of <d-code language="javascript">WhiteNoiseFourier</d-code>
+        to get <d-math>\phi^{{\bf k}}_{ab}</d-math>:
+        <d-code block="" language="javascript">
+          PowerSpectrumRealizationFourier = sqrtPowerSpectrumArray * WhiteNoiseFourier
+        </d-code>
+
+        Note that the above multiplication is carried out with the <d-code language="javascript">Times</d-code>
+        function, not
+        <d-code language="javascript">Dot</d-code>.
+      </li>
+    </ol>
+
+    <h4>Plotting the Realization</h4>
+
+    <p>
+      Finally, we transform from <d-math>\phi^{{\bf k}}_{ab}\longrightarrow \phi^{{\bf x}}_{ab}</d-math> and
+      plot the result.
+      This is done in a single command as:
+    </p>
+
+    <d-code block="" language="javascript">
+      MatrixPlot[Re[InverseFourier[PowerSpectrumRealizationFourier]]]
+    </d-code>
+
+    <p>
+      Above, the real part of the transform was taken using <d-code language="javascript">Re</d-code> because numerical
+      errors
+      induce tiny imaginary components in the final calculation of <d-math>\phi^{{\bf x}}_{ab}</d-math>.
+      The results of the realization for various power spectra can be seen in Fig. 2.
+    </p>
+
+
+
+    <figure>
+      <img src="images/five_power_laws.png">
+      <figcaption> Fig. 2: Realizations for <d-math>P(k)=k^{-n}</d-math> with <d-math>n\in\{0,1,2,3,4\}</d-math> from
+        left to right.
+        The <d-math>n=0</d-math> realization is white noise while the <d-math>n=2</d-math> realization is scale
+        invariant. The
+        length scale over which fluctuations are correlated increases as <d-math>n</d-math> increases.</figcaption>
+    </figure>
+
+
+    <h3>An Example in <d-math>d=3</d-math>
+    </h3>
+
+    <p>
+      Finally, we present the results of a higher dimensional realization: Fig. 3 is a GIF which shows
+      successive slices of a <d-math>d=3</d-math> realization for a power spectrum <d-math>P(k)=k^{-4}</d-math>.
+    </p>
+
+    <figure class="center">
+      <img src="images/anim.gif">
+      <figcaption> Fig. 3: Slices of a <d-math>d=3</d-math>, <d-math>
+          P(k)\propto
+          k^{-4}</d-math> realization. A scale invariant power spectrum <d-math>
+          P(k)\propto
+          k^{-3}</d-math> is more physically relevant, e.g. for inflation, but leads to a less interesting GIF.
+      </figcaption>
+    </figure>
+
+  </d-article>
+
+
+
+  <d-appendix>
+
+
+    <h3>Acknowledgements</h3>
+
+    <p>
+      Thank you to <a href="https://distill.pub" target="_blank">the Distill team</a> for making their
+      <a href="https://github.com/distillpub" target="_blank">article template publicly available.</a>
+    </p>
+
+
+    <h3>Additional Links</h3>
+
+    <ul class="color-dot-ul">
+      <li><a
+          href="https://mathematica.stackexchange.com/questions/4829/efficiently-generating-n-d-gaussian-random-fields"
+          target="_blank">The <em>Mathematica</em> code we used was heavily based on this Stack
+          Exchange post.</a></li>
+      <li><a href="../static/files/GaussianRealizationsMinimalNotebook.nb" target="_blank">A minimal
+          <em>Mathematica</em> notebook implementing the above can be downloaded here.</a></li>
+      <li><a href="https://github.com/garrett361/cmbpy" target="_blank">My python (Jupyter notebook) implementation of
+          the <em>Mathematica</em> code above, with some
+          modifications and additions.</a>
+      </li>
+    </ul>
+
+
+
+
+
+    <d-footnote-list></d-footnote-list>
+    <d-citation-list></d-citation-list>
+  </d-appendix>
+
+  <!-- bibliography will be inlined during Distill pipeline's pre-rendering -->
+  <d-bibliography src="bibliography.bib"></d-bibliography>
+
+</body>
