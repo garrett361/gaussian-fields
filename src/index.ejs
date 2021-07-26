@@ -7,10 +7,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style id="distill-article-specific-styles">
-    <%=require("../static/styles.css") %>
-  </style>
-  <script src="https://distill.pub/template.v2.js"></script>
+  <script src="template.v2.js"></script>
 </head>
 
 <body>
@@ -29,12 +26,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 
   <d-article>
 
-    <p>
-      <u>Note:</u> A python (Jupyter notebook) implementation of the <em>Mathematica</em> code below, with some
-      modifications
-      and additions, can now be found at
-      <a href="https://github.com/garrett361/cmbpy" target="_blank">on my GitHub page.</a>
-    </p>
+
 
     <h4>Introduction</h4>
 
@@ -63,7 +55,8 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 
     <figure>
       <img src="images/gaussian.svg">
-      <figcaption> A realization of a Gaussian random field. The statistics of the realization are fully encoded in the
+      <figcaption> A realization of a two-dimensional, Gaussian random field with a scale-invariant <d-math>P(k)\propto
+          k^{-2}</d-math> power spectrum. The statistics of the realization are fully encoded in the
         two-point function <d-math>\langle
           \phi({\bf x})\phi({\bf y})\rangle</d-math>, due to its Gaussian nature.</figcaption>
     </figure>
@@ -108,12 +101,11 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 
     <p>
       We start by reviewing some of the theory behind random Gaussian fields, which I found difficult to
-      find in any one place in the literature, and then move on to the practical construction of our maps
-      using <em>Mathematica</em>. A sample <em>Mathematica</em> notebook <d-footnote id="d-footnote-jupyter">
-        <a href="https://github.com/garrett361/cmbpy" target="_blank">GitHub link to my Jupyter notebook implementing
-          similar methods to my <em>Mathematica</em> code.</a>
-      </d-footnote> is included at the end of the post. The methods used
-      for constructing the realization are by no means optimal; our goal is just to understand a quick and
+      find in any one place in the literature, and then sketch the practical construction of our maps
+      using <em>Mathematica</em>. <a href="https://github.com/garrett361/cmbpy" target="_blank">The full
+        <em>Mathematica</em> code (as well as a <d-code language="python">numpy</d-code> implementation in a Juptyer
+        notebook) can be found on my GitHub Page.</a> The methods
+      used for constructing the realization are by no means optimal; our goal is just to understand a quick and
       dirty method of generating realizations.
     </p>
 
@@ -228,7 +220,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </d-math>
 
     <p>
-      where <d-math>A_{ij}</d-math> is some positive definite matrix (and sums over repeated indices are implicit). The
+      where <d-math>A_{ij}</d-math> is some positive definite matrix (and sums over repeated indices are implied). The
       corresponding Gaussian two-point statistics are then given by:
     </p>
 
@@ -238,7 +230,8 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </d-math>
 
     <p> where <d-math>A^{-1}_{ij}</d-math> is the inverse of the matrix <d-math>A_{ij}</d-math>. All higher-order
-      correlators involving more factors of <d-math>q_{i}</d-math> can be written in terms of <d-math>A_{ij}</d-math>, a special property of the Gaussian distribution.</p>
+      correlators involving more factors of <d-math>q_{i}</d-math> can be written in terms of <d-math>A_{ij}</d-math>,
+      which is a special property of the Gaussian distribution.</p>
 
     <p>
       Probability Distribution <em>Functionals</em> are perhaps less familiar, but they are exactly the
@@ -384,7 +377,8 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
     <p>
-      The above presentation is slightly idealized, as we’ll have to make the realization on a discrete grid; we won’t be
+      The above presentation is slightly idealized, as we’ll have to make the realization on a discrete grid; we won’t
+      be
       able to work with continuous variables. Practical considerations which arise from working on a
       lattice are covered in the following sections.
     </p>
@@ -540,7 +534,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       reason, it is
       common (but not entirely universal)
       to index discrete Fourier transforms with index values running over precisely this set. For
-      instance, <em>Mathematica</em> and <em>NumPy</em> both use this
+      instance, <em>Mathematica</em> and <d-code language="python">numpy</d-code> both use this
       convention.
 
     </p>
@@ -562,47 +556,54 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       can be carried out in <em>Mathematica</em> as follows:
     </p>
 
-    <ol>
-      <li> We first build the vector of momenta with the indexing discussed above, <d-math>k_a=\frac{2\pi}{N}(0,\ldots,
-          N/2,-N/2+1,\ldots, -1)</d-math>, via:
+    <p>
+      <b>Step 1:</b> We first build the vector of momenta with the indexing discussed above, <d-math>
+        k_a=\frac{2\pi}{N}(0,\ldots,
+        N/2,-N/2+1,\ldots, -1)</d-math>, via:
 
-        <d-code block="" language="javascript">
-          kVector = N[(2*Pi/Nsize) * Join[Range[0, Nsize/2], Range[-Nsize/2+1, -1]]]
-        </d-code>
+      <d-code block="" language="javascript">
+        kVector = N[(2*Pi/Nsize) * Join[Range[0, Nsize/2], Range[-Nsize/2+1, -1]]]
+      </d-code>
+    </p>
 
-      </li>
-      <li>Next, build the power spectrum function. Take it to be of the power law form: <d-math>P(k)\propto
-          k^{-n}</d-math>. Because this <d-math>P(k)</d-math> is divergent at <d-math>k=0</d-math> (assuming <d-math>n>0
-        </d-math>), we will set the
-        value of the power spectrum to zero at this one point. This is implemented in
-        <em>Mathematica</em> as:
-        <d-code block="" language="javascript">
-          PowerLawPowerSpectrum[n_,k_] := If[k==0,0,1/Abs[k^n]]
-        </d-code>
+    <p>
+      <b>Step 2:</b> Next, build the power spectrum function. Take it to be of the power law form: <d-math>P(k)\propto
+        k^{-n}</d-math>. Because this <d-math>P(k)</d-math> is divergent at <d-math>k=0</d-math> (assuming <d-math>n>0
+      </d-math>), we will set the
+      value of the power spectrum to zero at this one point. This is implemented in
+      <em>Mathematica</em> as:
+      <d-code block="" language="javascript">
+        PowerLawPowerSpectrum[n_,k_] := If[k==0,0,1/Abs[k^n]]
+      </d-code>
 
-      </li>
-      <li>We want to evaluate <d-math>P^{1/2}(k)</d-math> at all points <d-math>(k_a,k_b)</d-math> with <d-math>
-          k=\sqrt{k_a^2+k_b^2}</d-math>.
-        This array is constructed using the <code>Outer</code> command:
-        <d-code block="" language="javascript">
-          sqrtPowerSpectrumArray = Outer[N[Sqrt[PowerLawPowerSpectrum[n, Norm[{##}]]]]&, kVector, kVector]
-        </d-code>
-        where <d-code language="javascript">n</d-code> should be replaced by the desired number determining the power
-        law.
-      </li>
-      <li>Finally, we mutiply the <d-code language="javascript">a, b</d-code> entry of
-        <d-code language="javascript">sqrtPowerSpectrumArray</d-code> by the <d-code language="javascript">a, b</d-code>
-        entry of <d-code language="javascript">WhiteNoiseFourier</d-code>
-        to get <d-math>\phi^{{\bf k}}_{ab}</d-math>:
-        <d-code block="" language="javascript">
-          PowerSpectrumRealizationFourier = sqrtPowerSpectrumArray * WhiteNoiseFourier
-        </d-code>
+    </p>
 
-        Note that the above multiplication is carried out with the <d-code language="javascript">Times</d-code>
-        function, not
-        <d-code language="javascript">Dot</d-code>.
-      </li>
-    </ol>
+    <p>
+      <b>Step 3:</b> We want to evaluate <d-math>P^{1/2}(k)</d-math> at all points <d-math>(k_a,k_b)</d-math> with
+      <d-math>
+        k=\sqrt{k_a^2+k_b^2}</d-math>.
+      This array is constructed using the <code>Outer</code> command:
+      <d-code block="" language="javascript">
+        sqrtPowerSpectrumArray = Outer[N[Sqrt[PowerLawPowerSpectrum[n, Norm[{##}]]]]&, kVector, kVector]
+      </d-code>
+      where <d-code language="javascript">n</d-code> should be replaced by the desired number determining the power
+      law.
+    </p>
+
+
+    <p>
+      <b>Step 4:</b> Finally, we mutiply the <d-code language="javascript">a, b</d-code> entry of
+      <d-code language="javascript">sqrtPowerSpectrumArray</d-code> by the <d-code language="javascript">a, b</d-code>
+      entry of <d-code language="javascript">WhiteNoiseFourier</d-code>
+      to get <d-math>\phi^{{\bf k}}_{ab}</d-math>:
+      <d-code block="" language="javascript">
+        PowerSpectrumRealizationFourier = sqrtPowerSpectrumArray * WhiteNoiseFourier
+      </d-code>
+
+      Note that the above multiplication is carried out with the <d-code language="javascript">Times</d-code>
+      function, not
+      <d-code language="javascript">Dot</d-code>.
+    </p>
 
     <h4>Plotting the Realization</h4>
 
@@ -663,7 +664,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <h3>Acknowledgements</h3>
 
     <p>
-      Thank you to <a href="https://distill.pub" target="_blank">the Distill team</a> for making their
+      Thank you to <a href="https://distill.pub" target="_blank">the <em>Distill</em> team</a> for making their
       <a href="https://github.com/distillpub" target="_blank">article template publicly available.</a>
     </p>
 
@@ -675,11 +676,10 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
           href="https://mathematica.stackexchange.com/questions/4829/efficiently-generating-n-d-gaussian-random-fields"
           target="_blank">The <em>Mathematica</em> code we used was heavily based on this Stack
           Exchange post.</a></li>
-      <li><a href="../static/files/GaussianRealizationsMinimalNotebook.nb" target="_blank">A minimal
-          <em>Mathematica</em> notebook implementing the above can be downloaded here.</a></li>
-      <li><a href="https://github.com/garrett361/cmbpy" target="_blank">My python (Jupyter notebook) implementation of
-          the <em>Mathematica</em> code above, with some
-          modifications and additions.</a>
+      <li><a href="https://github.com/garrett361/cmbpy" target="_blank">My GitHub page has both a minimal
+          <em>Mathematica</em> notebook
+          implementation of the above ideas along with a <d-code language="python">numpy</d-code>-based Jupyter notebook
+          with similar code (and a few modifications and additions).</a>
       </li>
     </ul>
 

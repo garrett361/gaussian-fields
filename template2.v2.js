@@ -1,0 +1,1 @@
+static/template.v2.js
