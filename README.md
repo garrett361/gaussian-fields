@@ -4,7 +4,7 @@ Explanation of gaussian random fields and how to generate them simply, given the
 
 ## Notes for using as a template
 
-Main code is in `src/index.ejs`.  Images, and diagrams are placed in `static`. In `index.ejs`, `img` `src` links should be written as though we are in the `static` directory already, e.g., `<img src="images/gaussian.svg">`,  for whatever reason.  
+Main code is in `src/index.ejs`.  Images, and diagrams are placed in `static`. In `index.ejs`, `img` `src` links should be written as though we are in the `static` directory already, e.g., `<img src="images/gaussian.svg">`,  for whatever reason.  I restructured the front matter and re-wrote parts of `template.v2.js` so that the relevant data is all within `index.ejs` with the DOI field removed and the date more explicitly called.
 
 A local development server which (mostly) updates as changes are made to the code can be called with `npm run dev`.
 

@@ -104,6 +104,9 @@
     if (source.doi) {
       target.doi = source.doi;
     }
+    if (source.date) {
+      target.date = source.date; //GG 
+    }
   }
 
   class FrontMatter {
@@ -111,6 +114,7 @@
       this.title = 'unnamed article'; // 'Attention and Augmented Recurrent Neural Networks'
       this.description = ''; // 'A visual overview of neural attention...'
       this.authors = []; // Array of Author(s)
+      this.date=''; //GG: Date
 
       this.bibliography = new Map();
       this.bibliographyParsed = false;
@@ -2100,16 +2104,10 @@ d-appendix > distill-appendix {
       `).join('')}
     </div>
     <div>
-      <h3>Published</h3>
-      ${frontMatter.publishedDate ? `
-        <p>${frontMatter.publishedMonth} ${frontMatter.publishedDay}, ${frontMatter.publishedYear}</p> ` : `
+      <h3>Date</h3>
+      ${frontMatter.date ? `
+        <p>${frontMatter.date}</p> ` : `
         <p><em>Not published yet.</em></p>`}
-    </div>
-    <div>
-      <h3>DOI</h3>
-      ${frontMatter.doi ? `
-        <p><a href="https://doi.org/${frontMatter.doi}">${frontMatter.doi}</a></p>` : `
-        <p><em>No DOI yet.</em></p>`}
     </div>
   </div>
 `;

@@ -13,12 +13,39 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 
 <body>
 
+  <!-- I added a date field to more easily add the date to the front matter. Removed the DOI fiel -->
 
-  <!-- Commented out author/affiliation/etc header
-    
-  
-
--->
+  <d-front-matter>
+    <script type="text/json">
+      {
+        "title": "Gaussian Fields",
+        "description": "An example project using Webpack, Babel, and Svelte.",
+        "authors": [
+          {
+            "author": "Garrett Goon",
+            "authorURL": "https://garrettgoon.com",
+            "affiliation": "CMU",
+            "affiliationURL": "https://www.cmu.edu/physics/"
+          }
+        ],
+        "katex": {
+          "delimiters": [
+            {
+              "left": "$",
+              "right": "$",
+              "display": false
+            },
+            {
+              "left": "$$",
+              "right": "$$",
+              "display": true
+            }
+          ]
+        },
+        "date" : "26 July, 2021"
+      }
+  </script>
+  </d-front-matter>
 
   <d-title>
     <h1>Gaussian Fields</h1>
@@ -26,8 +53,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
   </d-title>
 
   <d-article>
-
-
 
     <h4>Introduction</h4>
 
