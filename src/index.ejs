@@ -8,6 +8,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="template.v2.js"></script>
+  <title>Gaussian Fields - Garrett Goon</title>
 </head>
 
 <body>
@@ -177,8 +178,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
         predicted to be slightly <em>red</em>, meaning <d-math>n_{s}-1</d-math> is small and negative, so that <d-math>
           P(k)</d-math> grows with decreasing <d-math>k</d-math>. A red spectrum corresponds to larger fluctuations at
         larger physical distance scales. <a href="https://arxiv.org/abs/1807.06209v1" target="_blank">
-          Planck 2018's bounds on the scalar tilt are <d-math>n_{s}= 0.9649 \pm 0.0042</d-math>
-          <d-cite key="Planck:2018vyg"></d-cite>.
+          Planck 2018's bounds on the scalar tilt are <d-math>n_{s}= 0.9649 \pm 0.0042</d-math>.
         </a>
       </d-footnote>
       power spectrum corresponds to fluctuations which have the same correlations no matter how separated
@@ -298,13 +298,11 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
         <a href="https://arxiv.org/abs/1903.04409" target="_blank">
           The Astro2020 Science White Paper on Primordial Non-Gaussianity
         </a>
-        <d-cite key="Meerburg:2019qqi"></d-cite>
         (which I was involved in) gives a research-level argument for the important role that non-Gaussianity plays in
         understanding
         the early universe. A pedagogical introduction to non-Gaussianity in inflation can alternatively be found in
         <a href="https://nms.kcl.ac.uk/eugene.lim/AdvCos/lecture2.pdf" target="_blank">
-          Eugene Lim’s excellent notes on the subject</a>
-        <d-cite key="EugeneLimNGNotes"></d-cite>.
+          Eugene Lim’s excellent notes on the subject</a>.
       </d-footnote>
       of these issues falls outside of the scope of this post.
     </p>
@@ -691,7 +689,13 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <d-citation-list></d-citation-list>
   </d-appendix>
 
-  <!-- bibliography will be inlined during Distill pipeline's pre-rendering -->
+
+  <!-- bibliography will be inlined during Distill pipeline's pre-rendering
+    (GG: I have not managed to get the bibliography to compile after the ejs
+     is converted to a static html file, so commenting out)
   <d-bibliography src="bibliography.bib"></d-bibliography>
+
+   -->
+
 
 </body>
