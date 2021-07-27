@@ -1,3 +1,5 @@
+// Modified from https://stackoverflow.com/questions/30976477/generate-static-html-files-from-ejs-templates
+
 var fs = require('fs'),
     ejs = require("ejs");
 
