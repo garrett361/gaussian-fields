@@ -100,7 +100,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       two-point function and we will primarily focus on this regime.
     </p>
 
-
     <p>
       Because of the homogeneous and isotropic nature of spatial slices, it’s convenient to discuss the
       Fourier transform of the correlator which takes on the form
@@ -141,8 +140,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 
     <h2> Theory Background</h2>
 
-
-
     <p>
       We start by reviewing the necessary theory background.
     </p>
@@ -153,7 +150,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       First, we set notation and review basic facts about equal time correlators of scalar quantities. We
       focus only on two-point functions.
     </p>
-
 
     <p>
       A homogeneous, isotropic position space two-point corrrelator only depends on the magnitude of the
@@ -178,7 +174,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       factors removed, as in
       <d-math>\langle \phi_{{\bf k}}\phi_{-{\bf k}}\rangle'=P(k)</d-math>.
     </p>
-
 
     <p>
       Two functional forms of the power spectrum are particularly important: white noise and scale
@@ -231,7 +226,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <d-math block="">
       \langle q^n\rangle= \int{\rm d} q\, \mathcal{P}(q)q^n
     </d-math>
-
 
     <p>
       The Gaussian PDF is of primary importance. For <d-math>n</d-math> random variables, <d-math>q_i</d-math>, the
@@ -299,18 +293,20 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       homogeneity
       and isotropy, it is straightforward to Fourier transform the above formulas in order to derive their
       momentum space analogues:
-
-      <d-math block="">
-        \mathcal{P}[\phi_{{\bf k}}]\propto \exp\left[-\frac{1}{2}\int{\rm d}^{d}\tilde{q}{\rm d}^{d}\tilde{p}\,
-        \phi_{{\bf q}}A(q)\tilde{\delta}^{d}({\bf q}+{\bf p})\phi_{{\bf p}}\right]
-      </d-math>
-
-      and
-
-      <d-math block="">\langle\phi_{{\bf
-        k}}\phi_{{\bf k}'}\rangle=\frac{\tilde{\delta}^{d}({\bf k}+{\bf k}')}{A(k)}\ .
-      </d-math>
     </p>
+
+    <d-math block="">
+      \mathcal{P}[\phi_{{\bf k}}]\propto \exp\left[-\frac{1}{2}\int{\rm d}^{d}\tilde{q}{\rm d}^{d}\tilde{p}\,
+      \phi_{{\bf q}}A(q)\tilde{\delta}^{d}({\bf q}+{\bf p})\phi_{{\bf p}}\right]
+    </d-math>
+
+    <p>
+      and
+    </p>
+
+    <d-math block="">\langle\phi_{{\bf
+      k}}\phi_{{\bf k}'}\rangle=\frac{\tilde{\delta}^{d}({\bf k}+{\bf k}')}{A(k)}\ .
+    </d-math>
 
     <p>
       Clearly, the function <d-math>A(k)</d-math> above is simply the inverse of the power spectrum:
@@ -333,12 +329,9 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
 
-
     <!-- Implementation -->
 
     <h2> Implementation</h2>
-
-
 
     <p>
       We now demonstrate how to generate a realization, given <d-math>P(k)</d-math>. We first present the logic and
@@ -354,11 +347,10 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       which has <d-math>\langle \varphi_{{\bf k}}\varphi_{-{\bf k}}\rangle'=1</d-math>
       , then we can create a field with the desired power spectrum simply by defining <d-math>\phi_{\bf k}\equiv
         P^{1/2}(k)\varphi_{\bf k}</d-math>. The new field has the desired statistics, by construction, since
-      <d-math block="">
-        \langle \varphi_{\bf k} \varphi_{-{\bf k}}\rangle'= P(k)\langle \phi_{\bf k} \phi_{-{\bf k}}\rangle'=P(k)\ .
-      </d-math>
     </p>
-
+    <d-math block="">
+      \langle \varphi_{\bf k} \varphi_{-{\bf k}}\rangle'= P(k)\langle \phi_{\bf k} \phi_{-{\bf k}}\rangle'=P(k)\ .
+    </d-math>
 
     <p>
       Spelled out in more detail, we will perform the following steps:
@@ -383,10 +375,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
         <d-math>R_P({\bf x})=\int{\rm d}^d \tilde{k}\, e^{i{\bf k}\cdot{\bf x}} R_P({\bf x})</d-math>.
       </li>
     </ol>
-
-
-
-
 
     <p>
       Therefore, given a realization of the white noise field , we just have to multiply its Fourier space
@@ -421,7 +409,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       related <d-math>\phi^{{\bf x}}_{ab}</d-math> and <d-math>\phi^{{\bf k}}_{ab}</d-math> is replaced by a discrete
       one:
     </p>
-
 
     <d-math block="">
       \phi^{{\bf k}}_{ab}=\sum_{c,d=0}^{N-1}\exp\left(-ix_ck_a-ix_dk_b\right)\phi^{{\bf x}}_{cd}\ , \quad
@@ -463,27 +450,23 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <p>
       First, we construct a grid of white noise. When passing to the grid, the unit white noise
       probability distribution functional becomes the following ordinary PDF:
-
-
-      <d-math block="">
-        \mathcal{P}[\varphi({\bf x})]\longrightarrow
-        \mathcal{P}[\varphi^{{\bf x}}_{ab}]=\prod_{c,d=0}^{N-1}\frac{\exp\left[-\frac{1}{2}\left(\phi^{{\bf
-        x}}_{cd}\right)^2\right]}{\sqrt{2\pi}}\ .
-      </d-math>
     </p>
+
+    <d-math block="">
+      \mathcal{P}[\varphi({\bf x})]\longrightarrow
+      \mathcal{P}[\varphi^{{\bf x}}_{ab}]=\prod_{c,d=0}^{N-1}\frac{\exp\left[-\frac{1}{2}\left(\phi^{{\bf
+      x}}_{cd}\right)^2\right]}{\sqrt{2\pi}}\ .
+    </d-math>
 
     <p>
       By drawing pixel values from a normal distribution we can generated a white-noise realization as in Fig. 1
       below.
     </p>
 
-
-
     <figure>
       <img src="images/white_noise.svg">
       <figcaption> Fig. 1: A 1024 x 1024 realization of white noise generated in <em>Mathematica</em>.</figcaption>
     </figure>
-
 
     <p>
       In <em>Mathematica</em>, the white noise array can be generated via:
@@ -492,7 +475,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <d-code block="" language="javascript">
       WhiteNoise = RandomVariate[NormalDistribution[], {Nsize, Nsize}]
     </d-code>
-
 
     <p>
       where <d-code language="javascript">Nsize</d-code> is the size of the grid.
@@ -507,7 +489,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <d-code block="" language="javascript">
       WhiteNoiseFourier = Fourier[WhiteNoise]
     </d-code>
-
 
 
     <h4> Constructing the Fourier Realization (and Indexing Conventions)</h4>
@@ -559,7 +540,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       to index discrete Fourier transforms with index values running over precisely this set. For
       instance, <em>Mathematica</em> and <d-code language="python">numpy</d-code> both use this
       convention.
-
     </p>
 
     <p>
@@ -583,11 +563,11 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       <b>Step 1:</b> We first build the vector of momenta with the indexing discussed above, <d-math>
         k_a=\frac{2\pi}{N}(0,\ldots,
         N/2,-N/2+1,\ldots, -1)</d-math>, via:
-
-      <d-code block="" language="javascript">
-        kVector = N[(2*Pi/Nsize) * Join[Range[0, Nsize/2], Range[-Nsize/2+1, -1]]]
-      </d-code>
     </p>
+
+    <d-code block="" language="javascript">
+      kVector = N[(2*Pi/Nsize) * Join[Range[0, Nsize/2], Range[-Nsize/2+1, -1]]]
+    </d-code>
 
     <p>
       <b>Step 2:</b> Next, build the power spectrum function. Take it to be of the power law form: <d-math>P(k)\propto
@@ -595,34 +575,40 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       </d-math>), we will set the
       value of the power spectrum to zero at this one point. This is implemented in
       <em>Mathematica</em> as:
-      <d-code block="" language="javascript">
-        PowerLawPowerSpectrum[n_,k_] := If[k==0,0,1/Abs[k^n]]
-      </d-code>
-
     </p>
+
+    <d-code block="" language="javascript">
+      PowerLawPowerSpectrum[n_,k_] := If[k==0,0,1/Abs[k^n]]
+    </d-code>
 
     <p>
       <b>Step 3:</b> We want to evaluate <d-math>P^{1/2}(k)</d-math> at all points <d-math>(k_a,k_b)</d-math> with
       <d-math>
         k=\sqrt{k_a^2+k_b^2}</d-math>.
       This array is constructed using the <code>Outer</code> command:
-      <d-code block="" language="javascript">
-        sqrtPowerSpectrumArray = Outer[N[Sqrt[PowerLawPowerSpectrum[n, Norm[{##}]]]]&, kVector, kVector]
-      </d-code>
+    </p>
+
+    <d-code block="" language="javascript">
+      sqrtPowerSpectrumArray = Outer[N[Sqrt[PowerLawPowerSpectrum[n, Norm[{##}]]]]&, kVector, kVector]
+    </d-code>
+
+    <p>
       where <d-code language="javascript">n</d-code> should be replaced by the desired number determining the power
       law.
     </p>
-
 
     <p>
       <b>Step 4:</b> Finally, we mutiply the <d-code language="javascript">a, b</d-code> entry of
       <d-code language="javascript">sqrtPowerSpectrumArray</d-code> by the <d-code language="javascript">a, b</d-code>
       entry of <d-code language="javascript">WhiteNoiseFourier</d-code>
       to get <d-math>\phi^{{\bf k}}_{ab}</d-math>:
-      <d-code block="" language="javascript">
-        PowerSpectrumRealizationFourier = sqrtPowerSpectrumArray * WhiteNoiseFourier
-      </d-code>
+    </p>
 
+    <d-code block="" language="javascript">
+      PowerSpectrumRealizationFourier = sqrtPowerSpectrumArray * WhiteNoiseFourier
+    </d-code>
+
+    <p>
       Note that the above multiplication is carried out with the <d-code language="javascript">Times</d-code>
       function, not
       <d-code language="javascript">Dot</d-code>.
@@ -646,8 +632,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       induce tiny imaginary components in the final calculation of <d-math>\phi^{{\bf x}}_{ab}</d-math>.
       The results of the realization for various power spectra can be seen in Fig. 2.
     </p>
-
-
 
     <figure>
       <img src="images/five_power_laws.png">
@@ -705,10 +689,6 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
           with similar code (and a few modifications and additions).</a>
       </li>
     </ul>
-
-
-
-
 
     <d-footnote-list></d-footnote-list>
     <d-citation-list></d-citation-list>
