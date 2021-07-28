@@ -257,7 +257,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       same idea as PDFs simply applied to the case of random <em>fields</em> such as <d-math>\phi({\bf x})</d-math>,
       rather than random variables such as <d-math>q_i</d-math>. We will only focus on the case of Gaussian functionals
       whose form and properties are defined in exact analogy to the PDF case. Starting with a position
-      space field <d-math>\phi({\bf x})</d-math>, the Gaussian functional <d-math>\mathcal{P}(\phi({\bf x}))</d-math> is
+      space field <d-math>\phi({\bf x})</d-math>, the Gaussian functional <d-math>\mathcal{P}[\phi({\bf x})]</d-math> is
       written as
     </p>
 
@@ -533,7 +533,8 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
     <p>
-      Note that these manipulations effectively result in the the <d-math>a,b</d-math> momentum-space indices running over the values
+      Note that these manipulations effectively result in the the <d-math>a,b</d-math> momentum-space indices running
+      over the values
       <d-math>\{0,\ldots, N/2,-N/2+1,\ldots,-1\}</d-math>, rather than <d-math>\{0,\ldots, N-1\}</d-math>. For this
       reason, it is
       common (but not entirely universal)
@@ -544,10 +545,9 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 
     <p>
       This shuffling of indices has no effect on the transformation back to position-space. For instance, in
-      the limiting case where <d-math>P(k)\longrightarrow 1</d-math> the inverse transformations of both
-      <d-math>\phi^{{\bf k}}_{ab}</d-math> and <d-math>\varphi^{{\bf k}}_{ab}</d-math> produce the same white noise
-      realization
-      <d-math>\varphi^{{\bf x}}_{ab}</d-math>.
+      the limiting case where <d-math>P(k)\longrightarrow 1</d-math> the inverse transformations of both the re-indexed
+      <d-math>\phi^{{\bf k}}_{ab}</d-math> and the original <d-math>\varphi^{{\bf k}}_{ab}</d-math> produce the same
+      white noise realization <d-math>\varphi^{{\bf x}}_{ab}</d-math>.
     </p>
 
     <p>
@@ -559,12 +559,12 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </d-math>
 
     <p>
-      This field realizes the desired spectrum. The construction of
-      can be carried out in <em>Mathematica</em> as follows:
+      This field realizes the desired spectrum.
     </p>
 
     <p>
-      <b>Step 1:</b> We first build the vector of momenta with the indexing discussed above, <d-math>
+      Carrying out the above in <em>Mathematica</em>, we first build the vector of momenta with the indexing discussed
+      above, <d-math>
         k_a=\frac{2\pi}{N}(0,\ldots,
         N/2,-N/2+1,\ldots, -1)</d-math>, via:
     </p>
@@ -574,19 +574,17 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </d-code>
 
     <p>
-      <b>Step 2:</b> Next, build the power spectrum function. Take it to be of the power law form: <d-math>P(k)\propto
-        k^{-n}</d-math>. Because this <d-math>P(k)</d-math> is divergent at <d-math>k=0</d-math> (assuming <d-math>n>0
-      </d-math>), we will set the
-      value of the power spectrum to zero at this one point. This is implemented in
-      <em>Mathematica</em> as:
+      Next, we build the power spectrum function. Take it to be of the power law form: <d-math>P(k)\propto
+        k^{-n}</d-math>. For <d-math>n>0</d-math>,  <d-math>P(k)</d-math> is divergent at <d-math>k=0</d-math> and we handle this
+      by regularizing the spectrum to zero at this one point: 
     </p>
 
     <d-code block="" language="javascript">
-      PowerLawPowerSpectrum[n_,k_] := If[k==0,0,1/Abs[k^n]]
+      PowerLawPowerSpectrum[n_, k_] := If[k==0 && n>0, 0, 1/Abs[k^n]]
     </d-code>
 
     <p>
-      <b>Step 3:</b> We want to evaluate <d-math>P^{1/2}(k)</d-math> at all points <d-math>(k_a,k_b)</d-math> with
+      We want to evaluate <d-math>P^{1/2}(k)</d-math> at all points <d-math>(k_a,k_b)</d-math> with
       <d-math>
         k=\sqrt{k_a^2+k_b^2}</d-math>.
       This array is constructed using the <code>Outer</code> command:
@@ -602,9 +600,8 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
     <p>
-      <b>Step 4:</b> Finally, we mutiply the <d-code language="javascript">a, b</d-code> entry of
-      <d-code language="javascript">sqrtPowerSpectrumArray</d-code> by the <d-code language="javascript">a, b</d-code>
-      entry of <d-code language="javascript">WhiteNoiseFourier</d-code>
+      Finally, we mutiply <d-code language="javascript">sqrtPowerSpectrumArray</d-code> by
+       <d-code language="javascript">WhiteNoiseFourier</d-code> element-wise
       to get <d-math>\phi^{{\bf k}}_{ab}</d-math>:
     </p>
 
@@ -621,9 +618,8 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <h4>Plotting the Realization</h4>
 
     <p>
-      Finally, we transform from <d-math>\phi^{{\bf k}}_{ab}\longrightarrow \phi^{{\bf x}}_{ab}</d-math> and
-      plot the result.
-      This is done in a single command as:
+      We can transform back to position space, <d-math>\phi^{{\bf k}}_{ab}\longrightarrow \phi^{{\bf x}}_{ab}</d-math>, and
+      plot the realization via
     </p>
 
     <d-code block="" language="javascript">
