@@ -152,7 +152,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
     <p>
-      A homogeneous, isotropic position space two-point corrrelator only depends on the magnitude of the
+      A homogeneous, isotropic position-space two-point corrrelator only depends on the magnitude of the
       distance between the points of interest: <d-math>\langle \phi({\bf x})\phi({\bf y})\rangle=A(|{\bf x}-{\bf y}|)
       </d-math>. Due
       to this fact, the Fourier transformed correlator is proportional to a delta function and only
@@ -182,7 +182,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
 
     <p>
       <b>White Noise:</b>
-      <d-math>P(k)\propto C</d-math> with <d-math>C</d-math> constant. This corresponds to a position space
+      <d-math>P(k)\propto C</d-math> with <d-math>C</d-math> constant. This corresponds to a position-space
       correlator of the form <d-math>\langle \phi({\bf x})\phi({\bf y})\rangle\propto C\delta^{d}({\bf x}-{\bf y})
       </d-math>, i.e.
       there are no correlations between fluctuations at separated points if the power spectrum is
@@ -292,7 +292,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       <d-math>A^{-1}({\bf x},{\bf z})=\frac{1}{C}\delta^{d}({\bf x}-{\bf z})</d-math>, for instance. Assuming spatial
       homogeneity
       and isotropy, it is straightforward to Fourier transform the above formulas in order to derive their
-      momentum space analogues:
+      momentum-space analogues:
     </p>
 
     <d-math block="">
@@ -359,7 +359,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     <ol>
       <li> Consider a white noise field of unit amplitude: <d-math>\varphi_{{\bf k}}</d-math> with <d-math>\langle
           \varphi_{{\bf k}}\varphi_{-{\bf k}}\rangle'=1</d-math>. </li>
-      <li> Generate a position space realization of the white noise, denoted by <d-math>R_{\rm white}({\bf x})</d-math>.
+      <li> Generate a position-space realization of the white noise, denoted by <d-math>R_{\rm white}({\bf x})</d-math>.
         That is, <d-math>R_{\rm white}({\bf x})</d-math> is a particular map showing the values of <d-math>\varphi({\bf
           x})
         </d-math> at various positions <d-math>{\bf x}</d-math> and for which <d-math>\langle\varphi({\bf
@@ -371,14 +371,14 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       <li> Multiply <d-math>R_{\rm white}({\bf k})</d-math> by the square root of the power spectrum to create
         <d-math>R_P({\bf k})=P^{1/2}(k)R_{\rm white}({\bf k})</d-math>.
       </li>
-      <li> Fourier transform <d-math>R_P({\bf k})</d-math> back to position space to get the desired realization:
+      <li> Fourier transform <d-math>R_P({\bf k})</d-math> back to position-space to get the desired realization:
         <d-math>R_P({\bf x})=\int{\rm d}^d \tilde{k}\, e^{i{\bf k}\cdot{\bf x}} R_P({\bf x})</d-math>.
       </li>
     </ol>
 
     <p>
       Therefore, given a realization of the white noise field , we just have to multiply its Fourier space
-      realization by and inverse Fourier transform to get a position space realization of <d-math>\phi({\bf x}).
+      realization by and inverse Fourier transform to get a position-space realization of <d-math>\phi({\bf x}).
       </d-math>
     </p>
 
@@ -533,7 +533,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
     <p>
-      Note that these manipulations effectively result in the the <d-math>a,b</d-math> indices running over the values
+      Note that these manipulations effectively result in the the <d-math>a,b</d-math> momentum-space indices running over the values
       <d-math>\{0,\ldots, N/2,-N/2+1,\ldots,-1\}</d-math>, rather than <d-math>\{0,\ldots, N-1\}</d-math>. For this
       reason, it is
       common (but not entirely universal)
@@ -543,11 +543,15 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
     <p>
-      In the limit <d-math>P(k)\to 1</d-math>, Fourier transforming <d-math>\phi^{{\bf k}}_{ab}</d-math>
-      yields the original position space white noise realization we started with, <d-math>\varphi^{{\bf k}}_{ab}
-      </d-math>,
-      despite the above manipulations. The position space field
-      is then built via
+      This shuffling of indices has no effect on the transformation back to position-space. For instance, in
+      the limiting case where <d-math>P(k)\longrightarrow 1</d-math> the inverse transformations of both
+      <d-math>\phi^{{\bf k}}_{ab}</d-math> and <d-math>\varphi^{{\bf k}}_{ab}</d-math> produce the same white noise
+      realization
+      <d-math>\varphi^{{\bf x}}_{ab}</d-math>.
+    </p>
+
+    <p>
+      The position-space field is then built via
     </p>
 
     <d-math block="">
