@@ -509,8 +509,10 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
       <d-math>\phi^{{\bf k}}_{ab}=P^{1/2}(k)\varphi^{{\bf k}}_{ab}</d-math>, then we'd find
       <d-math>\phi^{*{\bf k}}_{a(N/2+b)}\neq\phi^{{\bf k}}_{-a(N/2-b)}</d-math>, due to the power spectrum factor.
       Such a <d-math>\phi^{{\bf k}}_{ab}</d-math> would correspond to imaginary
-      <d-math>\phi^{{\bf x}}_{ab}</d-math>. The array <d-math>
-        \phi^{{\bf k}}_{ab}</d-math> can instead be properly constructed as in
+      <d-math>\phi^{{\bf x}}_{ab}</d-math>. This constraint can be satisfied by effectively re-indexing the <d-math>
+        \phi^{{\bf k}}_{ab}</d-math> such that its momentum-space indices run over the values
+      <d-math>\{0,\ldots, N/2,-N/2+1,\ldots,-1\}</d-math>, rather than <d-math>\{0,\ldots, N-1\}</d-math>, with all
+      factors of <d-math>{\bf k}</d-math> evaluated at the corresponding index value. More explicitly, we write the full tensor as
     </p>
 
     <d-math block="">
@@ -524,7 +526,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </d-math>
 
     <p>
-      In the second line above, the <d-math>k</d-math> in <d-math>P^{1/2}(k)\varphi^{{\bf k}}_{a(b-N)}</d-math> is
+      where in the second line above, the <d-math>k</d-math> in <d-math>P^{1/2}(k)\varphi^{{\bf k}}_{a(b-N)}</d-math> is
       evaluated at
       <d-math>k=\frac{2\pi}{N}\sqrt{a^2+(b-N)^2}</d-math> and similar for other lines.
       The factors of <d-math>N</d-math> can also be removed in the indices of the <d-math>\varphi^{{\bf k}}</d-math>'s,
@@ -533,12 +535,7 @@ as with /static as their root. E.g. <img src="/diagrams/fig1.png">
     </p>
 
     <p>
-      Note that these manipulations effectively result in the the <d-math>a,b</d-math> momentum-space indices running
-      over the values
-      <d-math>\{0,\ldots, N/2,-N/2+1,\ldots,-1\}</d-math>, rather than <d-math>\{0,\ldots, N-1\}</d-math>. For this
-      reason, it is
-      common (but not entirely universal)
-      to index discrete Fourier transforms with index values running over precisely this set. For
+      The above index conventions for discrete Fourier transforms are standard. For
       instance, <em>Mathematica</em> and <d-code language="python">numpy</d-code> both use this
       convention.
     </p>
